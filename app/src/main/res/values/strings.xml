@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Panda Store</string>
+    <string name="login_welcome">PandaStore</string>
+    <string name="login_subtitle">Alışverişe başlamak için giriş yapın.</string>
+    <string name="register_welcome">Aramıza Katıl</string>
+    <string name="register_subtitle">Yeni bir hesap oluşturarak avantajlardan yararlan.</string>
+    <string name="hint_name">Ad</string>
+    <string name="hint_surname">Soyad</string>
+    <string name="hint_email">E-Posta</string>
+    <string name="hint_password">Şifre</string>
+    <string name="btn_login">GİRİŞ YAP</string>
+    <string name="btn_register">KAYIT OL</string>
+    <string name="need_account">Hesabın yok mu? Kayıt Ol</string>
+    <string name="already_have_account">Zaten üye misin? Giriş Yap</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/homeFragment"
+        android:icon="@drawable/home"
+        android:title="Ana Sayfam" />
+
+    <item
+        android:id="@+id/categoriesFragment"
+        android:icon="@drawable/list"
+        android:title="Listelerim" />
+
+    <item
+        android:id="@+id/cartFragment"
+        android:icon="@drawable/shopping_cart"
+        android:title="Sepetim" />
+
+    <item
+        android:id="@+id/profileFragment"
+        android:icon="@drawable/user"
+        android:title="Hesabım" />
+</menu>

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    style="@style/BackgroundScreen"> <View
+    android:id="@+id/headerBg"
+    android:layout_width="match_parent"
+    android:layout_height="220dp"
+    android:background="@color/main_color"
+    app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/imgProfile"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:layout_marginTop="40dp"
+        android:padding="4dp"
+        android:src="@drawable/user"
+        app:shapeAppearanceOverlay="@style/CircleImage"
+        app:tint="@color/main_color"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+    <TextView
+        android:id="@+id/tvUserName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Yükleniyor..."
+        android:textColor="@color/white"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:layout_marginTop="12dp"
+        app:layout_constraintTop_toBottomOf="@id/imgProfile"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/tvUserAge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Yaş: --"
+        android:textColor="#CCFFFFFF"
+        android:textSize="14sp"
+        app:layout_constraintTop_toBottomOf="@id/tvUserName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="-20dp"
+        style="@style/SurfaceStyle"
+        app:cardCornerRadius="24dp"
+        app:cardElevation="8dp"
+        app:strokeWidth="0dp"
+        app:layout_constraintTop_toBottomOf="@id/tvUserAge"
+        app:layout_constraintBottom_toBottomOf="parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:paddingTop="24dp">
+
+            <TextView
+                android:id="@+id/btnOrders"
+                style="@style/ProfileMenuItem"
+                android:drawableStart="@drawable/orders"
+                android:text="Siparişlerim" />
+            <View style="@style/Divider" />
+
+            <TextView
+                android:id="@+id/btnFavorites"
+                style="@style/ProfileMenuItem"
+                android:drawableStart="@drawable/heart"
+                android:text="Beğendiklerim" />
+            <View style="@style/Divider" />
+
+            <TextView
+                android:id="@+id/btnAddresses"
+                style="@style/ProfileMenuItem"
+                android:drawableStart="@drawable/address"
+                android:text="Adreslerim" />
+            <View style="@style/Divider" />
+
+            <TextView
+                android:id="@+id/btnReviews"
+                style="@style/ProfileMenuItem"
+                android:drawableStart="@drawable/comments"
+                android:text="Değerlendirmelerim" />
+            <View style="@style/Divider" />
+
+            <TextView
+                android:id="@+id/btnLogout"
+                style="@style/ProfileMenuItem"
+                android:text="Çıkış Yap"
+                android:textColor="#D32F2F"
+                android:drawableTint="#D32F2F"
+                app:drawableStartCompat="@drawable/user_logout"
+                android:layout_marginTop="16dp"/>
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

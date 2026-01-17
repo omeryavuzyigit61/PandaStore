@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="main_color">#FF6F00</color>
+    <!--<color name="background_color">#F8F8FA</color>-->
+    <color name="gray">#282828</color>">
+    <color name="background_color">#F8F8FA</color>
+    <color name="surface_color">#353535</color>
+    <color name="text_color">#FFFFFF</color>
+
+    <color name="card_footer_bg">#F5F5F5</color>
+    <color name="discount_red">#D32F2F</color>
+</resources>
