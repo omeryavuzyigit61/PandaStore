@@ -7,8 +7,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.allmoviedatabase.pandastore.R
+import com.allmoviedatabase.pandastore.adapter.AddressAdapter
 import com.allmoviedatabase.pandastore.databinding.FragmentAddressListBinding
-import com.allmoviedatabase.pandastore.view.adapter.AddressAdapter
 import com.allmoviedatabase.pandastore.view.bottomsheet.AddressBottomSheet
 import com.allmoviedatabase.pandastore.viewmodel.AddressViewModel
 import com.allmoviedatabase.pandastore.viewmodel.AuthState

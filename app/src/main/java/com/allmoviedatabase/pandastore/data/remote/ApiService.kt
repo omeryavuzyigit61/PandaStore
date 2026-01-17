@@ -4,10 +4,13 @@ import com.allmoviedatabase.pandastore.model.address.AddressDto
 import com.allmoviedatabase.pandastore.model.address.AddressRequest
 import com.allmoviedatabase.pandastore.model.login.LoginRequest
 import com.allmoviedatabase.pandastore.model.login.LoginResponse
+import com.allmoviedatabase.pandastore.model.product.ProductDto
 import com.allmoviedatabase.pandastore.model.product.ProductListResponse
 import com.allmoviedatabase.pandastore.model.register.RegisterRequest
 import com.allmoviedatabase.pandastore.model.register.RegisterResponse
 import com.allmoviedatabase.pandastore.model.register.UserDto
+import com.allmoviedatabase.pandastore.model.review.CreateReviewRequest
+import com.allmoviedatabase.pandastore.model.review.ReviewDto
 import io.reactivex.rxjava3.core.Single
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -54,4 +57,21 @@ interface ApiService {
         @Query("sortBy") sortBy: String? = null, // price_low, price_high, newest, popular
         @Query("brand") brand: String? = null
     ): Single<ProductListResponse>
+
+    @GET("products/{id}")
+    fun getProductDetail(@Path("id") id: Int): Single<ProductDto>
+
+    @GET("reviews/product/{id}")
+    fun getProductReviews(@Path("id") productId: Int): Single<List<ReviewDto>>
+
+    // 4️⃣ Yorum Yap (Token gerektirir - Retrofit Interceptor halleder)
+    @POST("reviews")
+    fun addReview(@Body request: CreateReviewRequest): Single<ReviewDto>
+
+    @PATCH("reviews/{id}")
+    fun updateReview(@Path("id") reviewId: Int, @Body request: CreateReviewRequest): Single<ReviewDto>
+
+    // 6️⃣ Yorum Sil
+    @DELETE("reviews/{id}")
+    fun deleteReview(@Path("id") reviewId: Int): Single<Unit>
 }

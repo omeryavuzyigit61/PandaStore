@@ -9,6 +9,7 @@
     <color name="surface_color">#353535</color>
     <color name="text_color">#FFFFFF</color>
 
-    <color name="card_footer_bg">#F5F5F5</color>
+    <color name="card_footer_bg">#EDEDED</color>
+    <color name="card_footer_bg_dark">#212121</color>
     <color name="discount_red">#D32F2F</color>
 </resources>

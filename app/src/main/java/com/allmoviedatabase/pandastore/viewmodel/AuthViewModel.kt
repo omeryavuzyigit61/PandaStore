@@ -6,6 +6,7 @@ import com.allmoviedatabase.pandastore.domain.repository.AuthRepository
 import com.allmoviedatabase.pandastore.model.login.LoginResponse
 import com.allmoviedatabase.pandastore.model.register.RegisterRequest
 import com.allmoviedatabase.pandastore.model.register.RegisterResponse
+import com.allmoviedatabase.pandastore.util.JwtUtils
 import com.allmoviedatabase.pandastore.util.TokenManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -19,14 +20,12 @@ class AuthViewModel @Inject constructor(
     private val tokenManager: TokenManager
 ) : ViewModel() {
 
-    // DÜZELTME: LoginState yerine AuthState<LoginResponse> kullanıyoruz
     val loginState = MutableLiveData<AuthState<LoginResponse>>()
     val registerState = MutableLiveData<AuthState<RegisterResponse>>()
 
     private val disposable = CompositeDisposable()
 
     fun login(email: String, pass: String) {
-        // AuthState.Loading kullanıyoruz
         loginState.value = AuthState.Loading
 
         disposable.add(
@@ -35,7 +34,18 @@ class AuthViewModel @Inject constructor(
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     { response ->
-                        // Başarılı olduğunda AuthState.Success içine koyuyoruz
+                        // --- DÜZELTME BURADA ---
+
+                        // 1. Token'ın içinden ID'yi söküp alıyoruz
+                        val userIdFromToken = JwtUtils.getUserIdFromToken(response.accessToken) ?: ""
+
+                        // 2. Tokenları ve bulduğumuz ID'yi kaydediyoruz
+                        tokenManager.saveSession(
+                            response.accessToken,
+                            response.refreshToken,
+                            userIdFromToken // <-- Artık ID'yi buradan veriyoruz
+                        )
+
                         loginState.value = AuthState.Success(response)
                     },
                     { error ->
@@ -45,6 +55,7 @@ class AuthViewModel @Inject constructor(
         )
     }
 
+    // ... register, isUserLoggedIn ve onCleared AYNI KALSIN ...
     fun register(req: RegisterRequest) {
         registerState.value = AuthState.Loading
         disposable.add(

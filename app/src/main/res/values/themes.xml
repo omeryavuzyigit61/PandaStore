@@ -47,4 +47,13 @@
     <style name="CircleImage">
         <item name="cornerSize">50%</item>
     </style>
+
+    <style name="RatingBar" parent="Widget.AppCompat.RatingBar.Small">
+        <item name="colorControlActivated">#FFC107</item>
+        <item name="colorControlNormal">#E0E0E0</item>
+    </style>
+
+    <style name="card_footer">
+        <item name="android:background">@color/card_footer_bg</item>
+    </style>
 </resources>

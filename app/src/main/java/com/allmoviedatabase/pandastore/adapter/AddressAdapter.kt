@@ -1,4 +1,4 @@
-package com.allmoviedatabase.pandastore.view.adapter
+package com.allmoviedatabase.pandastore.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/BackgroundScreen"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     android:fitsSystemWindows="true">
 
     <com.google.android.material.card.MaterialCardView
@@ -13,41 +12,44 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_margin="16dp"
-        app:cardCornerRadius="20dp"
-        app:cardElevation="6dp"
         android:clickable="true"
         android:focusable="true"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="6dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@drawable/ic_arrow_back"
             android:layout_gravity="center"
-            app:tint="@color/black"/>
+            android:src="@drawable/arrow_left"
+            app:tint="@color/black" />
     </com.google.android.material.card.MaterialCardView>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/bottomBar">
+        android:fillViewport="true"
+        app:layout_constraintBottom_toTopOf="@id/bottomBar"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingBottom="20dp">
 
             <ImageView
                 android:id="@+id/imgProductDetail"
+                style="@style/BackgroundScreen"
                 android:layout_width="match_parent"
                 android:layout_height="350dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_shopping_cart"
-                android:background="#F5F5F5" />
+                android:scaleType="fitCenter"
+                android:src="@drawable/shopping_cart" />
 
             <LinearLayout
+                style="@style/BackgroundScreen"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -57,84 +59,225 @@
                     android:id="@+id/tvDetailBrand"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    tools:text="Apple"
                     android:textColor="@color/main_color"
+                    android:textSize="14sp"
                     android:textStyle="bold"
-                    android:textSize="14sp" />
+                    tools:text="Apple" />
 
                 <TextView
                     android:id="@+id/tvDetailName"
+                    style="@style/TextDescriptionStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    tools:text="iPhone 15 Pro Max 256GB Natural Titanium"
-                    android:textColor="@color/black"
-                    android:textStyle="bold"
+                    android:layout_marginTop="4dp"
                     android:textSize="22sp"
-                    android:layout_marginTop="4dp"/>
+                    android:textStyle="bold"
+                    tools:text="iPhone 15 Pro Max" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
+                    android:layout_marginTop="8dp"
                     android:gravity="center_vertical"
-                    android:layout_marginTop="8dp">
+                    android:orientation="horizontal">
 
-                    <ImageView
-                        android:layout_width="16dp"
-                        android:layout_height="16dp"
-                        android:src="@drawable/ic_star"
-                        app:tint="#FFC107"/> <TextView
-                    android:id="@+id/tvRating"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:text="4.8 (124 Değerlendirme)"
-                    android:textSize="13sp"
-                    android:layout_marginStart="4dp"
-                    android:textColor="#616161"/>
+                    <RatingBar
+                        android:id="@+id/ratingBarSummary"
+                        style="@style/RatingBar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:isIndicator="true"
+                        android:numStars="5"
+                        android:stepSize="0.1"
+                        tools:rating="4.5" />
+
+                    <TextView
+                        android:id="@+id/tvRating"
+                        style="@style/TextDescriptionStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:textSize="13sp"
+                        tools:text="4.8 (124)" />
                 </LinearLayout>
 
-                <View
-                    style="@style/Divider"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginBottom="16dp"/>
+                <View style="@style/Divider" android:layout_marginVertical="16dp" />
 
                 <TextView
+                    style="@style/TextDescriptionStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Ürün Özellikleri"
-                    android:textStyle="bold"
-                    android:textSize="16sp"
-                    android:textColor="@color/black"
-                    android:layout_marginBottom="8dp"/>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvAttributes"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    tools:itemCount="3"
-                    tools:listitem="@layout/item_attribute"
-                    android:nestedScrollingEnabled="false"/> <View
-                style="@style/Divider"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
                     android:text="Açıklama"
-                    android:textStyle="bold"
                     android:textSize="16sp"
-                    android:textColor="@color/black"
-                    android:layout_marginBottom="8dp"/>
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tvDescription"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Bu ürün harika özelliklere sahip..."
                     android:lineSpacingExtra="4dp"
                     android:textColor="#424242"
-                    android:textSize="14sp"/>
+                    android:textSize="14sp"
+                    tools:text="Ürün açıklaması..." />
+
+                <View style="@style/Divider" android:layout_marginVertical="16dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/TextDescriptionStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Değerlendirmeler"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/btnSeeAllReviews"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:text="Tümünü Gör >"
+                        android:textColor="@color/main_color"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvReviews"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"
+                    tools:itemCount="1"
+                    tools:listitem="@layout/item_review" />
+
+                <TextView
+                    android:id="@+id/tvNoReviews"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:text="Henüz yorum yapılmamış."
+                    android:textAlignment="center"
+                    android:textColor="#757575"
+                    android:visibility="gone" />
+
+                <View style="@style/Divider" android:layout_marginVertical="16dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:text="Puan Ver ve Yorum Yap"
+                    style="@style/TextDescriptionStyle"
+                    android:textStyle="bold" />
+
+                <RatingBar
+                    android:id="@+id/ratingBarInput"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="12dp"
+                    style="?android:attr/ratingBarStyle"
+                    android:numStars="5"
+                    android:stepSize="1.0"
+                    android:rating="0"
+                    android:isIndicator="false"
+                    android:progressTint="#FFC107"
+                    android:secondaryProgressTint="#FFC107" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    app:boxCornerRadiusBottomEnd="8dp"
+                    app:boxCornerRadiusBottomStart="8dp"
+                    app:boxCornerRadiusTopEnd="8dp"
+                    app:boxCornerRadiusTopStart="8dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etReviewTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Başlık (Örn: Harika Ürün)"
+                        android:inputType="textCapSentences"
+                        android:maxLines="1" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:boxCornerRadiusBottomEnd="12dp"
+                    app:boxCornerRadiusBottomStart="12dp"
+                    app:boxCornerRadiusTopEnd="12dp"
+                    app:boxCornerRadiusTopStart="12dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etComment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="top"
+                        android:hint="Deneyimini paylaş..."
+                        android:inputType="textMultiLine"
+                        android:minLines="3" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="8dp">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnDeleteReview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="SİL"
+                        android:textColor="@color/white"
+                        app:backgroundTint="#D32F2F"
+                        app:cornerRadius="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:visibility="gone"
+                        tools:visibility="visible"/>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnSendReview"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="GÖNDER"
+                        android:textColor="@color/white"
+                        app:backgroundTint="@color/main_color"
+                        app:cornerRadius="8dp" />
+                </LinearLayout>
+
+                <View style="@style/Divider" android:layout_marginVertical="16dp" />
+
+                <TextView
+                    android:id="@+id/lblAttributes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:text="Ürün Özellikleri"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvAttributes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"
+                    tools:listitem="@layout/item_attribute" />
 
             </LinearLayout>
         </LinearLayout>
@@ -142,49 +285,74 @@
 
     <LinearLayout
         android:id="@+id/bottomBar"
+        style="@style/BackgroundScreen"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:elevation="24dp"
         android:orientation="horizontal"
-        android:background="@color/white"
         android:padding="16dp"
-        android:elevation="16dp"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:orientation="vertical">
 
-            <TextView
+            <LinearLayout
+                android:id="@+id/layoutOldPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Toplam Fiyat"
-                android:textSize="12sp"
-                android:textColor="#757575"/>
+                android:orientation="horizontal"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <TextView
+                    android:id="@+id/tvDetailOldPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#757575"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    tools:text="180.000 ₺" />
+
+                <TextView
+                    android:id="@+id/tvDetailDiscount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:background="#FFEBEE"
+                    android:paddingHorizontal="4dp"
+                    android:textColor="#D32F2F"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    tools:text="%10" />
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/tvBottomPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="74.999 ₺"
-                android:textStyle="bold"
                 android:textColor="@color/main_color"
-                android:textSize="20sp"/>
+                android:textSize="20sp"
+                android:textStyle="bold"
+                tools:text="74.999 ₺" />
         </LinearLayout>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnAddToCart"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
+            android:paddingHorizontal="32dp"
             android:text="SEPETE EKLE"
-            android:textStyle="bold"
             android:textColor="@color/white"
-            app:cornerRadius="12dp"
+            android:textStyle="bold"
             app:backgroundTint="@color/main_color"
-            android:paddingHorizontal="32dp"/>
-
+            app:cornerRadius="12dp"
+            app:icon="@drawable/shopping_cart"
+            app:iconGravity="textStart"
+            app:iconTint="@color/white" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

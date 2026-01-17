@@ -6,9 +6,10 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.allmoviedatabase.pandastore.R
 import com.allmoviedatabase.pandastore.databinding.FragmentHomeBinding
-import com.allmoviedatabase.pandastore.view.adapter.ProductAdapter
+import com.allmoviedatabase.pandastore.adapter.ProductAdapter
 import com.allmoviedatabase.pandastore.view.bottomsheet.FilterBottomSheet
 import com.allmoviedatabase.pandastore.viewmodel.AuthState
 import com.allmoviedatabase.pandastore.viewmodel.HomeViewModel
@@ -33,8 +34,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private fun setupRecyclerView() {
         productAdapter = ProductAdapter { product ->
-            // Ürüne tıklayınca detaya git
-            // findNavController().navigate(...)
+            // Ürüne tıklanınca Detay'a git ve ürünü taşı
+            val action = HomeFragmentDirections.actionHomeFragmentToProductDetailFragment(product)
+            findNavController().navigate(action)
         }
         binding.rvProducts.adapter = productAdapter
     }
