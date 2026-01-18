@@ -1,7 +1,6 @@
-package com.allmoviedatabase.pandastore.data.repository
+package com.allmoviedatabase.pandastore.repository
 
 import com.allmoviedatabase.pandastore.data.remote.ApiService
-import com.allmoviedatabase.pandastore.repository.CartRepository
 import com.allmoviedatabase.pandastore.model.cart.AddToCartRequest
 import com.allmoviedatabase.pandastore.model.cart.CartResponse
 import com.allmoviedatabase.pandastore.model.cart.UpdateCartRequest

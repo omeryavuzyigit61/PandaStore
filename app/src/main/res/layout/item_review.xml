@@ -4,12 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="12dp"
     android:layout_marginHorizontal="2dp"
+    android:layout_marginBottom="12dp"
+    style="@style/SurfaceStyle"
     app:cardCornerRadius="12dp"
     app:cardElevation="2dp"
-    app:strokeWidth="0dp"
-    app:cardBackgroundColor="#FAFAFA">
+    app:strokeWidth="0dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -20,72 +20,73 @@
             android:id="@+id/cardAvatar"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            app:cardCornerRadius="20dp"
             app:cardBackgroundColor="#E0E0E0"
-            app:strokeWidth="0dp"
+            app:cardCornerRadius="20dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            app:strokeWidth="0dp">
 
             <TextView
                 android:id="@+id/tvAvatarText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                tools:text="A"
+                android:textColor="#616161"
                 android:textStyle="bold"
-                android:textColor="#616161"/>
+                tools:text="A" />
         </com.google.android.material.card.MaterialCardView>
 
         <TextView
             android:id="@+id/tvUserName"
             android:layout_width="0dp"
+            style="@style/TextDescriptionStyle"
             android:layout_height="wrap_content"
-            tools:text="Ömer Yılmaz"
-            android:textStyle="bold"
-            android:textSize="14sp"
-            android:textColor="@color/black"
             android:layout_marginStart="12dp"
             android:layout_marginEnd="8dp"
-            app:layout_constraintStart_toEndOf="@id/cardAvatar"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/ratingBarReview"
             app:layout_constraintEnd_toStartOf="@id/tvDate"
+            app:layout_constraintStart_toEndOf="@id/cardAvatar"
             app:layout_constraintTop_toTopOf="@id/cardAvatar"
-            app:layout_constraintBottom_toTopOf="@id/ratingBarReview"/>
+            tools:text="Ömer Yılmaz" />
 
         <TextView
             android:id="@+id/tvDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="12 Eki 2025"
-            android:textSize="11sp"
             android:textColor="#9E9E9E"
+            android:textSize="11sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="12 Eki 2025" />
 
         <RatingBar
             android:id="@+id/ratingBarReview"
             style="?android:attr/ratingBarStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:numStars="5"
-            android:rating="5"
-            android:theme="@style/RatingBar"
-            android:progressTint="#FFC107"
-            android:secondaryProgressTint="#FFC107"
             android:layout_marginTop="2dp"
+            android:numStars="5"
+            android:progressTint="#FFC107"
+            android:rating="5"
+            android:secondaryProgressTint="#FFC107"
+            android:theme="@style/RatingBar"
             app:layout_constraintStart_toStartOf="@id/tvUserName"
-            app:layout_constraintTop_toBottomOf="@id/tvUserName"/>
+            app:layout_constraintTop_toBottomOf="@id/tvUserName" />
 
         <TextView
             android:id="@+id/tvComment"
+            style="@style/TextDescriptionStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            tools:text="Ürün harika..."
-            android:textSize="13sp"
-            android:textColor="#424242"
             android:layout_marginTop="10dp"
-            app:layout_constraintStart_toStartOf="parent"
+            android:textSize="13sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cardAvatar"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cardAvatar"
+            tools:text="Ürün harika..." />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

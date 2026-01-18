@@ -1,8 +1,6 @@
-package com.allmoviedatabase.pandastore.data.repository
+package com.allmoviedatabase.pandastore.repository
 
 import com.allmoviedatabase.pandastore.data.remote.ApiService
-import com.allmoviedatabase.pandastore.domain.repository.AuthRepository
-
 import com.allmoviedatabase.pandastore.model.login.LoginRequest
 import com.allmoviedatabase.pandastore.model.login.LoginResponse
 import com.allmoviedatabase.pandastore.model.register.RegisterRequest

@@ -1,8 +1,10 @@
 package com.allmoviedatabase.pandastore.di
 
-import com.allmoviedatabase.pandastore.data.repository.AuthRepositoryImpl
-import com.allmoviedatabase.pandastore.data.repository.CartRepositoryImpl
-import com.allmoviedatabase.pandastore.domain.repository.AuthRepository
+import com.allmoviedatabase.pandastore.repository.AuthRepositoryImpl
+import com.allmoviedatabase.pandastore.repository.CartRepositoryImpl
+import com.allmoviedatabase.pandastore.repository.OrderRepositoryImpl
+import com.allmoviedatabase.pandastore.repository.AuthRepository
+import com.allmoviedatabase.pandastore.repository.OrderRepository
 import com.allmoviedatabase.pandastore.repository.AddressRepository
 import com.allmoviedatabase.pandastore.repository.AddressRepositoryImpl
 import com.allmoviedatabase.pandastore.repository.CartRepository
@@ -41,5 +43,11 @@ abstract class RepositoryModule {
     abstract fun bindCartRepository(
         cartRepositoryImpl: CartRepositoryImpl
     ): CartRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindOrderRepository(
+        orderRepositoryImpl: OrderRepositoryImpl
+    ): OrderRepository
 
 }

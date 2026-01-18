@@ -2,7 +2,7 @@ package com.allmoviedatabase.pandastore.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.allmoviedatabase.pandastore.domain.repository.AuthRepository
+import com.allmoviedatabase.pandastore.repository.AuthRepository
 import com.allmoviedatabase.pandastore.model.login.LoginResponse
 import com.allmoviedatabase.pandastore.model.register.RegisterRequest
 import com.allmoviedatabase.pandastore.model.register.RegisterResponse

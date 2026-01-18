@@ -8,6 +8,7 @@ import com.allmoviedatabase.pandastore.model.cart.UpdateCartRequest
 import com.allmoviedatabase.pandastore.model.login.LoginRequest
 import com.allmoviedatabase.pandastore.model.login.LoginResponse
 import com.allmoviedatabase.pandastore.model.order.CreateOrderRequest
+import com.allmoviedatabase.pandastore.model.order.OrderDto
 import com.allmoviedatabase.pandastore.model.order.OrderResponse
 import com.allmoviedatabase.pandastore.model.product.ProductDto
 import com.allmoviedatabase.pandastore.model.product.ProductListResponse
@@ -98,4 +99,15 @@ interface ApiService {
     // --- ORDER (SİPARİŞ) ---
     @POST("orders")
     fun createOrder(@Body request: CreateOrderRequest): Single<OrderResponse>
+
+    @GET("orders")
+    fun getOrders(): Single<List<OrderDto>>
+
+    // Tekil Sipariş Detayı
+    @GET("orders/{id}")
+    fun getOrderDetail(@Path("id") id: Int): Single<OrderResponse> // Detaylı response kullanıyoruz
+
+    // İptal Et
+    @PATCH("orders/{id}/cancel")
+    fun cancelOrder(@Path("id") id: Int): Single<Any>
 }

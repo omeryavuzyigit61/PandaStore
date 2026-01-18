@@ -1,4 +1,4 @@
-package com.allmoviedatabase.pandastore.domain.repository
+package com.allmoviedatabase.pandastore.repository
 
 import com.allmoviedatabase.pandastore.model.login.LoginResponse
 import com.allmoviedatabase.pandastore.model.register.RegisterRequest

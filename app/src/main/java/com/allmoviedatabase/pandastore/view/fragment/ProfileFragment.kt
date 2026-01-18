@@ -31,7 +31,9 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
     private fun setupClicks() {
         // Menü tıklamaları (Şimdilik boş sayfa veya Toast)
-        binding.btnOrders.setOnClickListener { showToast("Siparişlerim Yakında!") }
+        binding.btnOrders.setOnClickListener {
+            findNavController().navigate(R.id.action_profileFragment_to_orderListFragment)
+        }
         binding.btnFavorites.setOnClickListener { showToast("Beğendiklerim Yakında!") }
         binding.btnAddresses.setOnClickListener {
             findNavController().navigate(R.id.action_profileFragment_to_addressListFragment)

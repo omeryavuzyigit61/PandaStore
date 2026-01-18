@@ -54,13 +54,10 @@ class CartFragment : Fragment(R.layout.fragment_cart) {
     }
 
     private fun setupListeners() {
-        // Sepeti Onayla butonu
         binding.btnGoToCheckout.setOnClickListener {
-            // Sepet boş değilse Checkout ekranına git
             if (cartAdapter.currentList.isNotEmpty()) {
-                // Henüz CheckoutFragment oluşturmadık, oluşturunca burayı açarsın:
-                // findNavController().navigate(R.id.action_cartFragment_to_checkoutFragment)
-                Toast.makeText(context, "Sipariş Adımları Başlatılıyor...", Toast.LENGTH_SHORT).show()
+                // ARTIK ÇALIŞACAK:
+                findNavController().navigate(R.id.action_cartFragment_to_checkoutFragment)
             } else {
                 Toast.makeText(context, "Sepetin boş uşağum!", Toast.LENGTH_SHORT).show()
             }
