@@ -1,9 +1,11 @@
 package com.allmoviedatabase.pandastore.view.fragment
+
 import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -20,7 +22,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private lateinit var binding: FragmentHomeBinding
     private val viewModel: HomeViewModel by viewModels()
-    private lateinit var productAdapter: ProductAdapter // Bunu yazman gerekecek
+    private lateinit var productAdapter: ProductAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -33,33 +35,32 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun setupRecyclerView() {
-        productAdapter = ProductAdapter { product ->
-            // Ürüne tıklanınca Detay'a git ve ürünü taşı
-            val action = HomeFragmentDirections.actionHomeFragmentToProductDetailFragment(product)
-            findNavController().navigate(action)
-        }
+        // DÜZELTME BURADA: Adapter artık 2 parametre alıyor
+        productAdapter = ProductAdapter(
+            onProductClick = { product ->
+                // 1. Ürüne tıklanınca Detay'a git
+                val action = HomeFragmentDirections.actionHomeFragmentToProductDetailFragment(product)
+                findNavController().navigate(action)
+            },
+            onAddToCartClick = { product ->
+                // 2. Sepete Ekle butonuna tıklanında ViewModel'i çağır
+                viewModel.addToCart(product.id)
+            }
+        )
         binding.rvProducts.adapter = productAdapter
     }
 
     private fun setupSearch() {
-        // 1. ARAMA İŞLEMİ (Klavyedeki Büyüteç/Enter tuşuna basınca)
         binding.etSearch.setOnEditorActionListener { v, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 val query = v.text.toString().trim()
-
-                // Boş arama yapılmasın
                 if (query.isNotEmpty()) {
                     viewModel.search(query)
                 } else {
-                    // Boşsa filtreyi temizleyip hepsini getirsin (İsteğe bağlı)
                     viewModel.loadProducts()
                 }
-
-                // Klavyeyi kapat
                 val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
                 imm?.hideSoftInputFromWindow(v.windowToken, 0)
-
-                // Odağı kaldır (İmleç yanıp sönmesin)
                 binding.etSearch.clearFocus()
                 true
             } else false
@@ -67,7 +68,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun setupFilterButton() {
-        // 2. FİLTRE BUTONU (Artık TextInputLayout'un EndIcon'u oldu)
         binding.tilSearch.setEndIconOnClickListener {
             val filterSheet = FilterBottomSheet()
             filterSheet.onApplyFilters = { min, max, sort ->
@@ -78,21 +78,26 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun observeData() {
+        // Ürün Listesi Durumu
         viewModel.productsState.observe(viewLifecycleOwner) { state ->
             when(state) {
                 is AuthState.Loading -> binding.progressBar.visibility = View.VISIBLE
                 is AuthState.Success -> {
                     binding.progressBar.visibility = View.GONE
                     productAdapter.submitList(state.data)
-
-                    if (state.data.isEmpty()) {
-                        // "Sonuç bulunamadı" yazısı gösterilebilir
-                    }
                 }
                 is AuthState.Error -> {
                     binding.progressBar.visibility = View.GONE
-                    //Toast.makeText(context, state.message, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, state.message, Toast.LENGTH_SHORT).show()
                 }
+            }
+        }
+
+        // --- YENİ: Sepete Ekleme Mesajlarını Dinle ---
+        viewModel.addToCartMessage.observe(viewLifecycleOwner) { message ->
+            if (message != null) {
+                Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                viewModel.clearCartMessage()
             }
         }
     }

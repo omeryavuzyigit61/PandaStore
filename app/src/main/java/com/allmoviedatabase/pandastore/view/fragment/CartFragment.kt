@@ -1,60 +1,107 @@
 package com.allmoviedatabase.pandastore.view.fragment
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.allmoviedatabase.pandastore.R
+import com.allmoviedatabase.pandastore.adapter.CartAdapter
+import com.allmoviedatabase.pandastore.databinding.FragmentCartBinding
+import com.allmoviedatabase.pandastore.util.toCurrency
+import com.allmoviedatabase.pandastore.viewmodel.CartViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+@AndroidEntryPoint
+class CartFragment : Fragment(R.layout.fragment_cart) {
 
-/**
- * A simple [Fragment] subclass.
- * Use the [CartFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class CartFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private lateinit var binding: FragmentCartBinding
+    private val viewModel: CartViewModel by viewModels()
+    private lateinit var cartAdapter: CartAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding = FragmentCartBinding.bind(view)
+
+        setupAdapter()
+        setupListeners()
+        observeViewModel()
+
+        // Sayfa açılınca veriyi çek
+        viewModel.loadCart()
+    }
+
+    private fun setupAdapter() {
+        // Adapter'ı başlatırken lambda fonksiyonlarını veriyoruz
+        cartAdapter = CartAdapter(
+            onIncreaseClick = { item ->
+                viewModel.updateQuantity(item.id, item.quantity + 1)
+            },
+            onDecreaseClick = { item ->
+                viewModel.updateQuantity(item.id, item.quantity - 1)
+            },
+            onDeleteClick = { item ->
+                viewModel.deleteItem(item.id)
+            }
+        )
+
+        binding.rvCartItems.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = cartAdapter
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_cart, container, false)
+    private fun setupListeners() {
+        // Sepeti Onayla butonu
+        binding.btnGoToCheckout.setOnClickListener {
+            // Sepet boş değilse Checkout ekranına git
+            if (cartAdapter.currentList.isNotEmpty()) {
+                // Henüz CheckoutFragment oluşturmadık, oluşturunca burayı açarsın:
+                // findNavController().navigate(R.id.action_cartFragment_to_checkoutFragment)
+                Toast.makeText(context, "Sipariş Adımları Başlatılıyor...", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(context, "Sepetin boş uşağum!", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment CartFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            CartFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    private fun observeViewModel() {
+        // 1. Sepet Verisi
+        viewModel.cartState.observe(viewLifecycleOwner) { response ->
+            if (response != null && response.cart.items.isNotEmpty()) {
+                // Dolu Sepet Modu
+                binding.rvCartItems.visibility = View.VISIBLE
+                binding.layoutEmptyCart.visibility = View.GONE
+                binding.layoutCheckout.visibility = View.VISIBLE
+
+                // Listeyi Adapter'a bas
+                cartAdapter.submitList(response.cart.items)
+
+                // Toplam Tutarı Yaz
+                binding.tvTotalPrice.text = response.total.toCurrency()
+            } else {
+                // Boş Sepet Modu
+                binding.rvCartItems.visibility = View.GONE
+                binding.layoutEmptyCart.visibility = View.VISIBLE
+                binding.layoutCheckout.visibility = View.GONE
+
+                cartAdapter.submitList(emptyList())
             }
+        }
+
+        // 2. Yükleniyor
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            binding.progressBarCart.visibility = if (isLoading) View.VISIBLE else View.GONE
+            // Yüklenirken butonlara tıklanmasını engelleyebilirsin istersen
+        }
+
+        // 3. Hata
+        viewModel.error.observe(viewLifecycleOwner) { error ->
+            if (!error.isNullOrEmpty()) {
+                Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 }

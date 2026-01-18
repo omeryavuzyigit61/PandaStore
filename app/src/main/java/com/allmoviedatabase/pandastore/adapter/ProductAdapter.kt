@@ -13,7 +13,8 @@ import com.bumptech.glide.Glide
 import com.allmoviedatabase.pandastore.util.toCurrency
 
 class ProductAdapter(
-    private val onProductClick: (ProductDto) -> Unit
+    private val onProductClick: (ProductDto) -> Unit,
+    private val onAddToCartClick: (ProductDto) -> Unit
 ) : ListAdapter<ProductDto, ProductAdapter.ProductViewHolder>(ProductDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
@@ -70,7 +71,7 @@ class ProductAdapter(
             }
 
             binding.btnAddCart.setOnClickListener {
-                // Sepete ekle aksiyonu
+                onAddToCartClick(product)
             }
         }
     }

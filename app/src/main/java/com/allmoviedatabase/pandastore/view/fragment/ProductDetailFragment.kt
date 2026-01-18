@@ -108,6 +108,13 @@ class ProductDetailFragment : Fragment(R.layout.fragment_product_detail) {
             }
         }
 
+        viewModel.addToCartSuccess.observe(viewLifecycleOwner) { message ->
+            if (message != null) {
+                Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                viewModel.clearAddToCartMessage() // Mesajı tüket
+            }
+        }
+
         // 5. Hatalar
         viewModel.error.observe(viewLifecycleOwner) { error ->
             if (!error.isNullOrEmpty()) {
@@ -172,7 +179,8 @@ class ProductDetailFragment : Fragment(R.layout.fragment_product_detail) {
         binding.btnBack.setOnClickListener { findNavController().popBackStack() }
 
         binding.btnAddToCart.setOnClickListener {
-            Toast.makeText(context, "Sepete Eklendi", Toast.LENGTH_SHORT).show()
+            // Sadece Toast göstermek yerine ViewModel'e istek atıyoruz
+            viewModel.addToCart(productId, quantity = 1)
         }
 
         // --- SİLME BUTONU ---

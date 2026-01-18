@@ -48,6 +48,7 @@
         android:name="com.allmoviedatabase.pandastore.view.fragment.CategoriesFragment"
         android:label="Listelerim"
         tools:layout="@layout/fragment_home" />
+
     <fragment
         android:id="@+id/cartFragment"
         android:name="com.allmoviedatabase.pandastore.view.fragment.CartFragment"

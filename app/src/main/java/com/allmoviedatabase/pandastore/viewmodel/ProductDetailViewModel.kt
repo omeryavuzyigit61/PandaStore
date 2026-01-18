@@ -7,6 +7,7 @@ import com.allmoviedatabase.pandastore.repository.ProductRepository
 import com.allmoviedatabase.pandastore.model.product.ProductDto
 import com.allmoviedatabase.pandastore.model.review.CreateReviewRequest
 import com.allmoviedatabase.pandastore.model.review.ReviewDto
+import com.allmoviedatabase.pandastore.repository.CartRepository
 import com.allmoviedatabase.pandastore.util.TokenManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -17,6 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ProductDetailViewModel @Inject constructor(
     private val repository: ProductRepository,
+    private val cartRepository: CartRepository,
     private val tokenManager: TokenManager
 ) : ViewModel() {
 
@@ -36,6 +38,9 @@ class ProductDetailViewModel @Inject constructor(
     // İşlem Durumları
     private val _reviewActionSuccess = MutableLiveData<String?>() // Başarı mesajı
     val reviewActionSuccess: LiveData<String?> get() = _reviewActionSuccess
+
+    private val _addToCartSuccess = MutableLiveData<String?>()
+    val addToCartSuccess: LiveData<String?> get() = _addToCartSuccess
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> get() = _isLoading
@@ -137,6 +142,36 @@ class ProductDetailViewModel @Inject constructor(
                     { _isLoading.value = false; _error.value = it.localizedMessage }
                 )
         )
+    }
+
+    fun addToCart(productId: Int, quantity: Int = 1) {
+        // Giriş kontrolü (Opsiyonel: Zaten TokenManager var, repository'de interceptor hallediyor ama UI kontrolü iyidir)
+        if (tokenManager.getAccessToken().isNullOrEmpty()) {
+            _error.value = "Sepete eklemek için giriş yapmalısınız."
+            return
+        }
+
+        _isLoading.value = true
+        disposables.add(
+            cartRepository.addToCart(productId, quantity)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    {
+                        _isLoading.value = false
+                        _addToCartSuccess.value = "Ürün sepete eklendi!"
+                    },
+                    { error ->
+                        _isLoading.value = false
+                        _error.value = "Sepete eklenemedi: ${error.message}"
+                    }
+                )
+        )
+    }
+
+    // Mesajı gösterdikten sonra temizlemek için (Toast tekrar etmesin diye)
+    fun clearAddToCartMessage() {
+        _addToCartSuccess.value = null
     }
 
     override fun onCleared() {

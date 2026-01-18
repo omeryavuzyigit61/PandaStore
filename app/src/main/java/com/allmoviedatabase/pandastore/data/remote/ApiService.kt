@@ -2,8 +2,13 @@ package com.allmoviedatabase.pandastore.data.remote
 
 import com.allmoviedatabase.pandastore.model.address.AddressDto
 import com.allmoviedatabase.pandastore.model.address.AddressRequest
+import com.allmoviedatabase.pandastore.model.cart.AddToCartRequest
+import com.allmoviedatabase.pandastore.model.cart.CartResponse
+import com.allmoviedatabase.pandastore.model.cart.UpdateCartRequest
 import com.allmoviedatabase.pandastore.model.login.LoginRequest
 import com.allmoviedatabase.pandastore.model.login.LoginResponse
+import com.allmoviedatabase.pandastore.model.order.CreateOrderRequest
+import com.allmoviedatabase.pandastore.model.order.OrderResponse
 import com.allmoviedatabase.pandastore.model.product.ProductDto
 import com.allmoviedatabase.pandastore.model.product.ProductListResponse
 import com.allmoviedatabase.pandastore.model.register.RegisterRequest
@@ -74,4 +79,23 @@ interface ApiService {
     // 6️⃣ Yorum Sil
     @DELETE("reviews/{id}")
     fun deleteReview(@Path("id") reviewId: Int): Single<Unit>
+
+    @GET("cart")
+    fun getCart(): Single<CartResponse>
+
+    @POST("cart")
+    fun addToCart(@Body request: AddToCartRequest): Single<CartResponse>
+
+    @PATCH("cart/items/{id}")
+    fun updateCartItem(@Path("id") itemId: Int, @Body request: UpdateCartRequest): Single<Any> // Cevap body önemli değilse Any
+
+    @DELETE("cart/items/{id}")
+    fun deleteCartItem(@Path("id") itemId: Int): Single<Any>
+
+    @DELETE("cart")
+    fun clearCart(): Single<Any>
+
+    // --- ORDER (SİPARİŞ) ---
+    @POST("orders")
+    fun createOrder(@Body request: CreateOrderRequest): Single<OrderResponse>
 }
