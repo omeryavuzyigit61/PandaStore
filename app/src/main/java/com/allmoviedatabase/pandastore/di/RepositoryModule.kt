@@ -8,6 +8,8 @@ import com.allmoviedatabase.pandastore.repository.OrderRepository
 import com.allmoviedatabase.pandastore.repository.AddressRepository
 import com.allmoviedatabase.pandastore.repository.AddressRepositoryImpl
 import com.allmoviedatabase.pandastore.repository.CartRepository
+import com.allmoviedatabase.pandastore.repository.ListRepository
+import com.allmoviedatabase.pandastore.repository.ListRepositoryImpl
 import com.allmoviedatabase.pandastore.repository.ProductRepository
 import com.allmoviedatabase.pandastore.repository.ProductRepositoryImpl
 import dagger.Binds
@@ -49,5 +51,11 @@ abstract class RepositoryModule {
     abstract fun bindOrderRepository(
         orderRepositoryImpl: OrderRepositoryImpl
     ): OrderRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindListRepository(
+        listRepositoryImpl: ListRepositoryImpl
+    ): ListRepository
 
 }

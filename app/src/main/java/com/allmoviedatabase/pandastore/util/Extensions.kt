@@ -1,5 +1,8 @@
 package com.allmoviedatabase.pandastore.util
 
+import android.content.Context
+import android.view.View
+import android.widget.Toast
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.util.Locale
@@ -14,4 +17,24 @@ fun Double.toCurrency(): String {
 
     val decimalFormat = DecimalFormat(pattern, symbols)
     return "${decimalFormat.format(this)} ₺"
+}
+
+fun View.hide() {
+    this.visibility = View.GONE
+}
+
+fun View.show() {
+    this.visibility = View.VISIBLE
+}
+
+fun View.invs() {
+    this.visibility = View.INVISIBLE
+}
+
+fun Context.showToastLong(text: String) {
+    Toast.makeText(this, text, Toast.LENGTH_LONG).show()
+}
+
+fun Context.showToastShort(text: String) {
+    Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
 }

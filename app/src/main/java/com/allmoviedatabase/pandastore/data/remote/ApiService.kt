@@ -5,6 +5,11 @@ import com.allmoviedatabase.pandastore.model.address.AddressRequest
 import com.allmoviedatabase.pandastore.model.cart.AddToCartRequest
 import com.allmoviedatabase.pandastore.model.cart.CartResponse
 import com.allmoviedatabase.pandastore.model.cart.UpdateCartRequest
+import com.allmoviedatabase.pandastore.model.lists.AddListItemRequest
+import com.allmoviedatabase.pandastore.model.lists.CreateListRequest
+import com.allmoviedatabase.pandastore.model.lists.CustomListDto
+import com.allmoviedatabase.pandastore.model.lists.DiscoverListResponse
+import com.allmoviedatabase.pandastore.model.lists.UpdateListRequest
 import com.allmoviedatabase.pandastore.model.login.LoginRequest
 import com.allmoviedatabase.pandastore.model.login.LoginResponse
 import com.allmoviedatabase.pandastore.model.order.CreateOrderRequest
@@ -110,4 +115,40 @@ interface ApiService {
     // İptal Et
     @PATCH("orders/{id}/cancel")
     fun cancelOrder(@Path("id") id: Int): Single<Any>
+
+    @GET("lists")
+    fun getMyLists(): Single<List<CustomListDto>>
+
+    // 2. Liste Oluştur
+    @POST("lists")
+    fun createList(@Body request: CreateListRequest): Single<CustomListDto>
+
+    // 3. Tek Liste Detayı (Ürünlerle birlikte)
+    @GET("lists/{id}")
+    fun getListDetail(@Path("id") id: Int): Single<CustomListDto>
+
+    // 4. Liste Sil
+    @DELETE("lists/{id}")
+    fun deleteList(@Path("id") id: Int): Single<Any>
+
+    @PATCH("lists/{id}")
+    fun updateList(@Path("id") id: Int, @Body request: UpdateListRequest): Single<CustomListDto>
+
+    // 6. Keşfet / Public Listeler (EKSİK OLAN BU)
+    @GET("lists/discover")
+    fun getDiscoverLists(
+        @Query("page") page: Int = 1,
+        @Query("limit") limit: Int = 20
+    ): Single<DiscoverListResponse>
+
+    // 5. Listeye Ürün Ekle
+    @POST("lists/{id}/items")
+    fun addProductToList(@Path("id") listId: Int, @Body request: AddListItemRequest): Single<Any>
+
+    // 6. Listeden Ürün Çıkar
+    @DELETE("lists/{listId}/items/{productId}")
+    fun removeProductFromList(
+        @Path("listId") listId: Int,
+        @Path("productId") productId: Int // Dikkat: API productId istiyor, item ID değil.
+    ): Single<Any>
 }

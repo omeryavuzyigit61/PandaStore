@@ -34,7 +34,9 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         binding.btnOrders.setOnClickListener {
             findNavController().navigate(R.id.action_profileFragment_to_orderListFragment)
         }
-        binding.btnFavorites.setOnClickListener { showToast("Beğendiklerim Yakında!") }
+        binding.btnFavorites.setOnClickListener {
+            findNavController().navigate(R.id.action_profileFragment_to_categoriesFragment)
+        }
         binding.btnAddresses.setOnClickListener {
             findNavController().navigate(R.id.action_profileFragment_to_addressListFragment)
         }
@@ -76,7 +78,4 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
     }
 
-    private fun showToast(msg: String) {
-        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
-    }
 }
