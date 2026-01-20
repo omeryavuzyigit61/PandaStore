@@ -92,6 +92,16 @@
         android:label="AddressListFragment" />
 
     <fragment
+        android:id="@+id/listDetailFragment"
+        android:name="com.allmoviedatabase.pandastore.view.fragment.ListDetailFragment"
+        android:label="Liste Detayı"
+        tools:layout="@layout/fragment_list_detail">
+        <argument
+            android:name="listId"
+            app:argType="integer" />
+    </fragment>
+
+    <fragment
         android:id="@+id/productDetailFragment"
         android:name="com.allmoviedatabase.pandastore.view.fragment.ProductDetailFragment"
         android:label="Ürün Detayı"

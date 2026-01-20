@@ -14,7 +14,8 @@ import com.allmoviedatabase.pandastore.util.toCurrency
 
 class ProductAdapter(
     private val onProductClick: (ProductDto) -> Unit,
-    private val onAddToCartClick: (ProductDto) -> Unit
+    private val onAddToCartClick: (ProductDto) -> Unit,
+    private val onFavoriteClick: (ProductDto) -> Unit // YENİ: Favori Tıklama
 ) : ListAdapter<ProductDto, ProductAdapter.ProductViewHolder>(ProductDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
@@ -26,64 +27,41 @@ class ProductAdapter(
         holder.bind(getItem(position))
     }
 
-// ... diğer kodlar
-
     inner class ProductViewHolder(private val binding: ItemProductBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(product: ProductDto) {
-
             binding.tvProductName.text = product.name
             binding.tvBrand.text = product.brand ?: ""
             binding.tvPrice.text = product.price.toCurrency()
 
-            val imageUrl = product.getThumbnailUrl()
             Glide.with(binding.root.context)
-                .load(imageUrl)
-                .placeholder(android.R.drawable.ic_menu_gallery)
+                .load(product.getThumbnailUrl())
                 .into(binding.imgProduct)
 
-            // --- İNDİRİM MANTIĞI (DÜZELTİLDİ) ---
+            // İndirim Gösterimi
             if (product.discountRate != null && product.discountRate > 0) {
                 binding.layoutDiscount.visibility = View.VISIBLE
                 binding.tvDiscountPercent.text = "%${product.discountRate}"
-
                 if (product.compareAtPrice != null) {
                     binding.tvOldPrice.text = product.compareAtPrice.toCurrency()
                     binding.tvOldPrice.visibility = View.VISIBLE
-
-                    // 2. MÜDAHALE: Çizgiyi ve Yumuşatmayı (Anti-Alias) Birlikte Veriyoruz
-                    binding.tvOldPrice.paintFlags =
-                        binding.tvOldPrice.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG or Paint.ANTI_ALIAS_FLAG
-                } else {
-                    binding.tvOldPrice.visibility = View.GONE
+                    binding.tvOldPrice.paintFlags = binding.tvOldPrice.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
                 }
             } else {
                 binding.layoutDiscount.visibility = View.GONE
-
-                // Önemli: View geri dönüştürülürse çizgiyi kaldırmalıyız ki normal ürünler çizili çıkmasın!
-                binding.tvOldPrice.paintFlags =
-                    binding.tvOldPrice.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
             }
 
-            // --- TIKLAMA OLAYLARI ---
-            binding.root.setOnClickListener {
-                onProductClick(product)
-            }
+            // TIKLAMA OLAYLARI
+            binding.root.setOnClickListener { onProductClick(product) }
+            binding.btnAddCart.setOnClickListener { onAddToCartClick(product) }
 
-            binding.btnAddCart.setOnClickListener {
-                onAddToCartClick(product)
-            }
+            // YENİ: Kalp ikonuna tıklama
+            binding.btnFavoriteAction.setOnClickListener { onFavoriteClick(product) }
         }
     }
 
-    // ListAdapter için DiffUtil (Performanslı liste güncelleme)
     class ProductDiffCallback : DiffUtil.ItemCallback<ProductDto>() {
-        override fun areItemsTheSame(oldItem: ProductDto, newItem: ProductDto): Boolean {
-            return oldItem.id == newItem.id
-        }
-
-        override fun areContentsTheSame(oldItem: ProductDto, newItem: ProductDto): Boolean {
-            return oldItem == newItem
-        }
+        override fun areItemsTheSame(oldItem: ProductDto, newItem: ProductDto) = oldItem.id == newItem.id
+        override fun areContentsTheSame(oldItem: ProductDto, newItem: ProductDto) = oldItem == newItem
     }
 }

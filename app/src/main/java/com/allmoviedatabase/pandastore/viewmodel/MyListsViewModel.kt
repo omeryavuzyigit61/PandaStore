@@ -4,8 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.allmoviedatabase.pandastore.model.lists.CreateListRequest
-import com.allmoviedatabase.pandastore.repository.ListRepository
 import com.allmoviedatabase.pandastore.model.lists.CustomListDto
+import com.allmoviedatabase.pandastore.model.product.ProductDto
+import com.allmoviedatabase.pandastore.repository.CartRepository
+import com.allmoviedatabase.pandastore.repository.ListRepository
+import com.allmoviedatabase.pandastore.repository.ProductRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
@@ -14,111 +17,156 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MyListsViewModel @Inject constructor(
-    private val repository: ListRepository
+    private val listRepository: ListRepository,
+    private val productRepository: ProductRepository,
+    private val cartRepository: CartRepository
 ) : ViewModel() {
 
-    private val _listsState = MutableLiveData<MyListsState>()
-    val listsState: LiveData<MyListsState> get() = _listsState
+    private val _uiState = MutableLiveData<MultiState>()
+    val uiState: LiveData<MultiState> get() = _uiState
+
+    private val _actionMessage = MutableLiveData<String?>()
+    val actionMessage: LiveData<String?> get() = _actionMessage
 
     private val disposable = CompositeDisposable()
 
+    // Başlangıçta Beğendiklerim gelsin istersen burayı değiştir
     init {
-        getMyLists()
+        getFavorites()
     }
 
-    fun getMyLists() {
-        _listsState.value = MyListsState.Loading
+    // TAB 0: BEĞENDİKLERİM (Favori Ürünler)
+    fun getFavorites() {
+        _uiState.value = MultiState.Loading
         disposable.add(
-            repository.getMyLists()
+            productRepository.getFavorites() // Artık bu fonksiyon var!
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    { products ->
+                        if (products.isEmpty()) {
+                            _uiState.value = MultiState.Empty
+                        } else {
+                            _uiState.value = MultiState.SuccessProducts(products)
+                        }
+                    },
+                    {
+                        _uiState.value = MultiState.Error(it.localizedMessage ?: "Favoriler yüklenemedi")
+                    }
+                )
+        )
+    }
+
+    // TAB 1: LİSTELERİM
+    fun getMyLists() {
+        _uiState.value = MultiState.Loading
+        disposable.add(
+            listRepository.getMyLists()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     { lists ->
-                        if (lists.isEmpty()) {
-                            _listsState.value = MyListsState.Empty
-                        } else {
-                            _listsState.value = MyListsState.Success(lists)
-                        }
+                        if (lists.isEmpty()) _uiState.value = MultiState.Empty
+                        else _uiState.value = MultiState.SuccessLists(lists)
                     },
-                    { error ->
-                        _listsState.value =
-                            MyListsState.Error(error.message ?: "Listeler yüklenemedi")
-                    }
+                    { _uiState.value = MultiState.Error(it.message ?: "Hata") }
                 )
         )
     }
 
-    fun createList(name: String, desc: String?, icon: String, color: String) {
-        val request =
-            CreateListRequest(name, desc, isPrivate = true, coverColor = color, icon = icon)
-
-        _listsState.value = MyListsState.Loading
+    // TAB 2: KEŞFET
+    fun getDiscoverLists() {
+        _uiState.value = MultiState.Loading
         disposable.add(
-            repository.createList(request)
+            listRepository.getPublicLists()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                    {
-                        // Başarılı olunca listeyi yenile
-                        getMyLists()
+                    { lists ->
+                        if (lists.isEmpty()) _uiState.value = MultiState.Empty
+                        else _uiState.value = MultiState.SuccessLists(lists)
                     },
-                    { error ->
-                        _listsState.value = MyListsState.Error("Oluşturulamadı: ${error.message}")
-                    }
+                    { _uiState.value = MultiState.Error(it.message ?: "Hata") }
                 )
         )
     }
 
-    // Listeyi silmek için
+    // --- LİSTE İŞLEMLERİ (CRUD) ---
+    fun createList(name: String, desc: String?, icon: String, color: String) {
+        val request = CreateListRequest(name, desc, isPrivate = true, coverColor = color, icon = icon)
+        _uiState.value = MultiState.Loading
+        disposable.add(
+            listRepository.createList(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    { getMyLists() }, // Oluşturunca Listelerim sekmesine dön
+                    { _uiState.value = MultiState.Error("Oluşturulamadı: ${it.message}") }
+                )
+        )
+    }
+
     fun deleteList(id: Int) {
         disposable.add(
-            repository.deleteList(id)
+            listRepository.deleteList(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     { getMyLists() },
-                    { error -> _listsState.value = MyListsState.Error("Silinemedi") }
+                    { _uiState.value = MultiState.Error("Silinemedi") }
                 )
         )
     }
 
     fun updateList(id: Int, name: String, isPrivate: Boolean) {
-        _listsState.value = MyListsState.Loading
+        _uiState.value = MultiState.Loading
         disposable.add(
-            repository.updateList(id, name, isPrivate)
+            listRepository.updateList(id, name, isPrivate)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    { getMyLists() },
+                    { _uiState.value = MultiState.Error("Hata: ${it.message}") }
+                )
+        )
+    }
+
+    fun addToCart(productId: Int) {
+        disposable.add(
+            cartRepository.addToCart(productId, 1)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     {
-                        // Güncelleme başarılı, listeyi yenile
-                        // Hangi sekmedeysek onu yenilesek daha iyi ama şimdilik getMyLists
-                        getMyLists()
+                        _actionMessage.value = "Ürün sepete eklendi ✅"
                     },
                     { error ->
-                        _listsState.value = MyListsState.Error("Hata: ${error.message}")
+                        _actionMessage.value = "Sepete eklenirken hata: ${error.message}"
                     }
                 )
         )
     }
 
-    // KEŞFET
-    fun getDiscoverLists() {
-        _listsState.value = MyListsState.Loading
+    fun removeFromFavorites(productId: Int) {
         disposable.add(
-            repository.getPublicLists()
+            productRepository.removeFromFavorites(productId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                    { lists ->
-                        if (lists.isEmpty()) _listsState.value = MyListsState.Empty
-                        else _listsState.value = MyListsState.Success(lists)
+                    {
+                        _actionMessage.value = "Favorilerden çıkarıldı"
+                        // Listeyi anında yenile ki ürün ekrandan gitsin
+                        getFavorites()
                     },
                     { error ->
-                        _listsState.value =
-                            MyListsState.Error("Keşfet yüklenemedi: ${error.message}")
+                        _actionMessage.value = "Hata: ${error.message}"
                     }
                 )
         )
+    }
+
+    fun clearActionMessage() {
+        _actionMessage.value = null
     }
 
     override fun onCleared() {
@@ -127,9 +175,11 @@ class MyListsViewModel @Inject constructor(
     }
 }
 
-sealed class MyListsState {
-    object Loading : MyListsState()
-    object Empty : MyListsState()
-    data class Success(val data: List<CustomListDto>) : MyListsState()
-    data class Error(val message: String) : MyListsState()
+// ARTIK 2 FARKLI SUCCESS DURUMUMUZ VAR
+sealed class MultiState {
+    object Loading : MultiState()
+    object Empty : MultiState()
+    data class SuccessLists(val data: List<CustomListDto>) : MultiState()
+    data class SuccessProducts(val data: List<ProductDto>) : MultiState()
+    data class Error(val message: String) : MultiState()
 }

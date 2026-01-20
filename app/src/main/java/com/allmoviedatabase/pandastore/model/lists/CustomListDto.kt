@@ -1,9 +1,8 @@
 package com.allmoviedatabase.pandastore.model.lists
 
 import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import com.google.gson.annotations.SerializedName
 
-@Parcelize
 data class CustomListDto(
     val id: Int,
     val name: String,
@@ -12,6 +11,7 @@ data class CustomListDto(
     val coverColor: String?, // Hex code: #6366f1
     val icon: String?, // Emoji: 🎁
     val itemCount: Int? = 0, // Bazı API'ler liste çekerken item sayısını da döner, dönmezse items.size kullanırız
-    val items: List<CustomListItemDto>? = null, // Detayda dolu gelir
-    val createdAt: String
-) : Parcelable
+    val createdAt: String,
+    @SerializedName("items")
+    val products: List<ListItemDto>? = null
+)

@@ -45,6 +45,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             onAddToCartClick = { product ->
                 // 2. Sepete Ekle butonuna tıklanında ViewModel'i çağır
                 viewModel.addToCart(product.id)
+            },
+            onFavoriteClick = { product ->
+/*                // 3. PARAMETRE (EKSİK OLAN BUYDU): Favori İşlemi
+                // Eğer favorideyse çıkar, değilse ekle mantığı home'da genelde toggle çalışır
+                viewModel.toggleFavorite(product.id)*/
             }
         )
         binding.rvProducts.adapter = productAdapter

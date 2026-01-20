@@ -30,7 +30,7 @@ class MyListsAdapter(
 
             val visibility = if (item.isPrivate) "Gizli" else "Herkese Açık"
             // Item count null gelebilir, 0 varsayalım
-            val count = item.items?.size ?: item.itemCount ?: 0
+            val count = item.products?.size ?: 0
             binding.tvListInfo.text = "$count Ürün • $visibility"
 
             // Renk Ayarı (Hex string to Color)

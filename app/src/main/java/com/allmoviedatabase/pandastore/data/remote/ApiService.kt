@@ -5,6 +5,9 @@ import com.allmoviedatabase.pandastore.model.address.AddressRequest
 import com.allmoviedatabase.pandastore.model.cart.AddToCartRequest
 import com.allmoviedatabase.pandastore.model.cart.CartResponse
 import com.allmoviedatabase.pandastore.model.cart.UpdateCartRequest
+import com.allmoviedatabase.pandastore.model.favorites.FavoriteCheckResponse
+import com.allmoviedatabase.pandastore.model.favorites.FavoriteRequest
+import com.allmoviedatabase.pandastore.model.favorites.FavoriteResponseDto
 import com.allmoviedatabase.pandastore.model.lists.AddListItemRequest
 import com.allmoviedatabase.pandastore.model.lists.CreateListRequest
 import com.allmoviedatabase.pandastore.model.lists.CustomListDto
@@ -80,7 +83,10 @@ interface ApiService {
     fun addReview(@Body request: CreateReviewRequest): Single<ReviewDto>
 
     @PATCH("reviews/{id}")
-    fun updateReview(@Path("id") reviewId: Int, @Body request: CreateReviewRequest): Single<ReviewDto>
+    fun updateReview(
+        @Path("id") reviewId: Int,
+        @Body request: CreateReviewRequest
+    ): Single<ReviewDto>
 
     // 6️⃣ Yorum Sil
     @DELETE("reviews/{id}")
@@ -93,7 +99,10 @@ interface ApiService {
     fun addToCart(@Body request: AddToCartRequest): Single<CartResponse>
 
     @PATCH("cart/items/{id}")
-    fun updateCartItem(@Path("id") itemId: Int, @Body request: UpdateCartRequest): Single<Any> // Cevap body önemli değilse Any
+    fun updateCartItem(
+        @Path("id") itemId: Int,
+        @Body request: UpdateCartRequest
+    ): Single<Any> // Cevap body önemli değilse Any
 
     @DELETE("cart/items/{id}")
     fun deleteCartItem(@Path("id") itemId: Int): Single<Any>
@@ -115,6 +124,27 @@ interface ApiService {
     // İptal Et
     @PATCH("orders/{id}/cancel")
     fun cancelOrder(@Path("id") id: Int): Single<Any>
+
+    // --- FAVORİ İŞLEMLERİ ---
+
+    // 1. Favorileri Listele (BU EKSİKTİ, EKLENDİ)
+    @GET("favorites")
+    fun getFavorites(): Single<List<FavoriteResponseDto>>
+
+    // 2. Ürün Favorilerde mi Kontrol Et
+    @GET("favorites/check/{productId}")
+    fun checkIsFavorite(@Path("productId") id: Int): Single<FavoriteCheckResponse>
+
+    // 3. Favorilere Ekle
+    @POST("favorites")
+    fun addToFavorites(@Body request: FavoriteRequest): Single<Unit>
+
+    // 4. Favorilerden Çıkar
+    @DELETE("favorites/{productId}")
+    fun removeFromFavorites(@Path("productId") id: Int): Single<Unit>
+
+
+    // --- Liste İşlewmleri ---
 
     @GET("lists")
     fun getMyLists(): Single<List<CustomListDto>>

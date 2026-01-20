@@ -284,6 +284,55 @@
     </androidx.core.widget.NestedScrollView>
 
     <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/btnSaveToList"
+            style="@style/SurfaceStyle"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="12dp"
+            android:clickable="true"
+            android:focusable="true"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="2dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:src="@drawable/list"
+                app:tint="@color/main_color_2" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/btnFavorite"
+            style="@style/SurfaceStyle"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:clickable="true"
+            android:focusable="true"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="2dp">
+
+            <ImageView
+                android:id="@+id/imgFavoriteIcon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:src="@drawable/heart"
+                app:tint="@color/main_color" />
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+
+
+    <LinearLayout
         android:id="@+id/bottomBar"
         style="@style/BackgroundScreen"
         android:layout_width="match_parent"

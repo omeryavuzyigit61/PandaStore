@@ -8,6 +8,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.allmoviedatabase.pandastore.R
 import com.allmoviedatabase.pandastore.databinding.FragmentProfileBinding
+import com.allmoviedatabase.pandastore.util.showToastLong
 import com.allmoviedatabase.pandastore.viewmodel.AuthState
 import com.allmoviedatabase.pandastore.viewmodel.ProfileViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -40,7 +41,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         binding.btnAddresses.setOnClickListener {
             findNavController().navigate(R.id.action_profileFragment_to_addressListFragment)
         }
-        binding.btnReviews.setOnClickListener { showToast("Değerlendirmeler Yakında!") }
+        binding.btnReviews.setOnClickListener { requireContext().showToastLong("Değerlendirmeler Yakında!") }
 
         // ÇIKIŞ YAP
         binding.btnLogout.setOnClickListener {
@@ -71,7 +72,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
                 is AuthState.Error -> {
                     binding.progressBar.visibility = View.GONE
-                    showToast(state.message)
+                    requireContext().showToastLong(state.message)
                 }
             }
         }
